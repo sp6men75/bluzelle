@@ -1,5 +1,5 @@
 const _ = require('lodash');
-import {addNode, updateNode} from "../CommunicationService";
+import {addNode, updateNode, removeNode} from "../CommunicationService";
 
 describe('Node graph tab', () => {
     require('../getBaseElement')('body');
@@ -19,10 +19,20 @@ describe('Node graph tab', () => {
             });
         });
     });
+
+    describe('remove node', () => {
+        it('@watch should remove a node when a removeNodes command is received', () => {
+            expect(browser.isExisting('circle')).to.be.false;
+            const node = addNode();
+            browser.waitForExist('circle');
+            removeNode(node.address);
+            browser.waitForExist('circle', 5000, true);
+        })
+    })
 });
 
 const checkInfoTable = (address, value) => {
     browser.waitForExist(`g#node-${address}`, 2000);
     browser.moveToObject(`g#node-${address}`);
     browser.waitForExist(`td=${value}`, 2000);
-}
+};
